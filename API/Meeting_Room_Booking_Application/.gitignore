@@ -1,0 +1,24 @@
+.DS_STORE
+ 
+# .NET Core build and output folders
+.vs
+Meeting_Room_Booking_Application/bin
+Meeting_Room_Booking_Application/obj
+
+# .NET Core artifacts
+*.dll
+*.exe
+*.pdb
+*.userprefs
+*.bak
+
+# Visual Studio files
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
+
+# NuGet packages
+*.nuget.props
+*.nuget.targets
