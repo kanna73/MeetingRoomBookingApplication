@@ -7,6 +7,6 @@ namespace Meeting_Room_Booking_Application.Interface.IRepo
     {
         Task<BookMeeting> AddMeeting(BookMeeting meeting);
         Task<bool> CheckRoomAvailable(BookMeeting book);
-
+        Task<List<TodaysMeetingView>> getTodayMeeting();
     }
 }

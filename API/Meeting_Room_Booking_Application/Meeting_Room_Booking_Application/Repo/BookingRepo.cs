@@ -42,5 +42,10 @@ namespace Meeting_Room_Booking_Application.Repo
             bool recordExists = (bool)recordExistParameter.Value;
             return recordExists;
         }
+
+        public async Task<List<TodaysMeetingView>> getTodayMeeting()
+        {
+            return await _dbContext.USPTodaysMeeting();
+        }
     }
 }

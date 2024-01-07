@@ -12,13 +12,11 @@ namespace Meeting_Room_Booking_Application.Controllers
     public class BookingController : Controller
     {
         private readonly IBookingService _bookingService;
-        private readonly MeetingApplicationContext _dbContext;
 
 
-        public BookingController(IBookingService bookingService, MeetingApplicationContext dbContext)
+        public BookingController(IBookingService bookingService)
         {
             _bookingService = bookingService;
-            _dbContext = dbContext;
         }
 
         [HttpPost]
@@ -35,6 +33,12 @@ namespace Meeting_Room_Booking_Application.Controllers
             return result;
         }
 
+        [HttpGet]
+
+        public async Task<List<TodaysMeetingView>> getTodayMeeting()
+        {
+            return await _bookingService.getTodayMeeting();
+        }
        
 
     }

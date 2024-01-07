@@ -8,5 +8,6 @@ namespace Meeting_Room_Booking_Application.Interface.IService
     {
         Task<BookingRequest> AddBooking(BookingRequest book);
         Task<bool> CheckRoomAvailable(BookingRequest book);
+        Task<List<TodaysMeetingView>> getTodayMeeting();
     }
 }
