@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Meeting_Room_Booking_Application.Exceptions;
 using Meeting_Room_Booking_Application.Interface.IRepo;
 using Meeting_Room_Booking_Application.Interface.IService;
 using Meeting_Room_Booking_Application.Models;
 using Meeting_Room_Booking_Application.Repo;
 using Meeting_Room_Booking_Application.RequestModels;
 using Meeting_Room_Booking_Application.ViewModels;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -33,13 +35,13 @@ namespace Meeting_Room_Booking_Application.Services
                 newUser.Password = hmac.ComputeHash(Encoding.UTF8.GetBytes(user.UserPassword));
                 newUser.Hashkey = hmac.Key;
                 var resultUser = await _userRepo.addUser(newUser);
-                if (resultUser != null)
-                {
+                /*if (resultUser != null)
+                {*/
                     addedUser = new RegisterRequest();
                     addedUser.Email = resultUser.Email;
                     return addedUser;
-                }
-                return null;
+                /*}
+                return null;*/
             }
         }
 
@@ -54,13 +56,13 @@ namespace Meeting_Room_Booking_Application.Services
                 for (int i = 0; i < userPass.Length; i++)
                 {
                     if (userPass[i] != userData.Password[i])
-                        return null;
+                         throw new NotFoundException("the user name or password incorrect");
                 }
                 user = new LoginView();
                 user.Token = _tokenService.GenerateToken(userData);
                 return user;
             }
-            return null;
+            throw new NotFoundException("the user name or password incorrect");
         }
     }
 }

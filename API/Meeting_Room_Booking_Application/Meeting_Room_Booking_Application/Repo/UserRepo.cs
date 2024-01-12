@@ -26,7 +26,7 @@ namespace Meeting_Room_Booking_Application.Repo
 
         public async Task<User> addUser(User newUser)
         {
-            var oldUser = await _dbContext.Users.SingleOrDefaultAsync(u =>  newUser.Email == newUser.Email);
+            var oldUser = await _dbContext.Users.SingleOrDefaultAsync(u =>  u.Email == newUser.Email);
             if (oldUser == null)
             {
                 await _dbContext.Users.AddAsync(newUser);

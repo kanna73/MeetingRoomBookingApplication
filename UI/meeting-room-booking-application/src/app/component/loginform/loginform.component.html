@@ -1,0 +1,33 @@
+<div class="loginFormContainer">
+    <div class="formcontainer">
+        <div class="loginForm">
+            <img  class="logo" src="../../../assets/Kanini_logo.png" alt="logo">
+            <p class="subheading">Sign In</p>
+            <p class="content">Welcome back! Please enter email id and password</p>
+            <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+              <mat-form-field  class="emailfield">
+                <mat-label>Email</mat-label>
+                <input matInput class="emailbox" matInput type="text" formControlName="email">
+                <mat-hint  class="error" *ngIf="emails?.touched && emails?.hasError('required')">
+                    This email field is requried
+                </mat-hint>
+                <mat-hint  class="error" *ngIf="emails?.touched && emails?.hasError('invalidDomain')">
+                    Domain name should be Kanini
+                </mat-hint>
+              </mat-form-field>
+              <mat-form-field class="passwordfield" appearance="fill">
+                <mat-label>Password</mat-label>
+                <input matInput  class="passwordbox" matInput type="password" formControlName="userPassword">
+                <mat-hint class="error" *ngIf="password?.touched && password?.hasError('required')">
+                    This password field is required    
+                </mat-hint>
+              </mat-form-field>
+              <button mat-raised-button class="sumbitButton" color="primary" type="submit" >Login</button>
+            </form> 
+          </div>
+    </div>
+      
+ </div>
+
+
+ 

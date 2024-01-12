@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Meeting_Room_Booking_Application.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[action]")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
 
@@ -15,19 +15,21 @@ namespace Meeting_Room_Booking_Application.Controllers
         {
             _userService = userService;
         }
-
+        [ProducesResponseType(StatusCodes.Status200OK)]//Success Response
+        [ProducesResponseType(StatusCodes.Status404NotFound)]//Failure Response
         [HttpPost]
-        public async Task<LoginView> Login(LoginRequest user)
+        public async Task<ActionResult<LoginView>> authenticateUser(LoginRequest user)
         {
             var result = await _userService.Login(user);
-            return result;
+            return Ok(result);
         }
-
+        [ProducesResponseType(StatusCodes.Status201Created)]//Success Response
+        [ProducesResponseType(StatusCodes.Status404NotFound)]//Failure Response
         [HttpPost]
-        public async Task<RegisterRequest> Register(RegisterRequest newUser)
+        public async Task<ActionResult<RegisterRequest>> registerUser(RegisterRequest newUser)
         {
             var result = await _userService.Register(newUser);
-            return result;
+            return Created("Employee registered",result);
         }
     }
 }

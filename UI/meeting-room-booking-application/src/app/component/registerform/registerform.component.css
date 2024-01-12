@@ -1,0 +1,100 @@
+.formContainer{
+    position: relative;
+    width:45vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.registercontainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:500px;
+    height: 820px;
+    border: 1px;
+    box-shadow:2px 1px 10px 2px grey;
+    border-radius: 10px;
+}
+.logo{
+    width:200px;
+}
+.matInput{
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+.mainheading{
+    margin-top: 20px;
+    font-size: 25px;
+    font-weight: 900;
+
+  }
+  .subheading{
+    margin-top: 40px;
+    font-size: 25px;
+    font-weight: 500;
+  }
+  .nameField{
+    font-family: "Poppins", sans-serif;
+    margin-top: 30px;
+    font-size: 18px; 
+    width: 400px;
+    height: 80px;
+  }
+  .EmpnoField{
+    font-family: "Poppins", sans-serif;
+    margin-top: 30px;
+    font-size: 18px; 
+    width: 400px;
+    height: 80px;
+  }
+  .emailfield{
+    font-family: "Poppins", sans-serif;
+    margin-top: 30px;
+    font-size: 18px; 
+    width: 400px;
+    height: 80px;
+  }
+  .locationField{
+    font-family: "Poppins", sans-serif;
+    margin-top: 30px;
+    font-size: 18px; 
+    width: 400px;
+    height: 80px;
+  }
+  .passwordfield{
+    font-family: "Poppins", sans-serif;
+    margin-top: 30px;
+    font-size: 18px; 
+    width: 400px;
+    height: 80px;
+  }
+  .sumbitButton{
+    font-family: "Poppins", sans-serif;
+    margin-top: 20px;
+    width: 125px;
+    height: 50px;
+    font-size: 18px;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+  }
+  .buttongroup{
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    
+  }
+  
+  .error{
+    color: red;
+  }
+  .login{
+    font-size: 15px;
+  }
+  .loginClick{
+    color:blue;
+    cursor: pointer;
+  }

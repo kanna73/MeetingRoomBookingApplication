@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Meeting_Room_Booking_Application.Controllers
 {
-    [Route("api/[Controller]/[action]")]
+    [Route("api/[action]")]
     [ApiController]
-    public class BookingController : Controller
+    public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;
 
@@ -18,26 +18,30 @@ namespace Meeting_Room_Booking_Application.Controllers
         {
             _bookingService = bookingService;
         }
-
+        [ProducesResponseType(StatusCodes.Status201Created)]//Success Response
+        [ProducesResponseType(StatusCodes.Status404NotFound)]//Failure Response
         [HttpPost]
-        public async Task<BookingRequest> AddBooking(BookingRequest book)
+        public async Task<ActionResult<BookingRequest>> meeting(BookingRequest book)
         {
             var result = await _bookingService.AddBooking(book);
-            return result;
+            return Created("meeting booked",result);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]//Success Response
+        [ProducesResponseType(StatusCodes.Status404NotFound)]//Failure Response
         [HttpPost]
-        public async Task<bool> CheckRoomAvailable(BookingRequest book)
+        public async Task<ActionResult<bool>> validateMeeting(BookingRequest book)
         {
             var result  = await _bookingService.CheckRoomAvailable(book);
-            return result;
+            return Ok(result);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]//Success Response
+        [ProducesResponseType(StatusCodes.Status404NotFound)]//Failure Response
         [HttpGet]
-
-        public async Task<List<TodaysMeetingView>> getTodayMeeting()
+        public async Task<ActionResult<List<TodaysMeetingView>>> getTodayMeeting()
         {
-            return await _bookingService.getTodayMeeting();
+            return Ok(await _bookingService.getTodayMeeting());
         }
        
 

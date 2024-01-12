@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Meeting_Room_Booking_Application.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[action]")]
     [ApiController]
-    public class LocationController : Controller
+    public class LocationController : ControllerBase
     {
        private readonly ILocationService _locationService;
 
@@ -15,11 +15,13 @@ namespace Meeting_Room_Booking_Application.Controllers
             _locationService = locationService;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]//Success Response
+        [ProducesResponseType(StatusCodes.Status404NotFound)]//Failure Response
         [HttpGet]
-        public async Task<List<LocationView>> GetAllLocation()
+        public async Task<ActionResult<List<LocationView>>> locations()
         {
             var result = await _locationService.getAllLocation();
-            return result;
+            return Ok(result);
         }
     }
 }
