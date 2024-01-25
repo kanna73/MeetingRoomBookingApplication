@@ -115,6 +115,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.MapControllers();

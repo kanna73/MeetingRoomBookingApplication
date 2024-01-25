@@ -5,10 +5,11 @@ import { Store } from '@ngrx/store';
 import { jwtDecode } from "jwt-decode";
 import { tokenModel } from '../../../shared/token.model';
 import { DecodedToken } from '../../Interface/Itoken';
-import { setEmail, setName, setToken } from '../../../shared/token.action';
+import { setEmail, setId, setName, setToken } from '../../../shared/token.action';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../Service/Authentication/auth.service';
-import { AppStateModel } from '../../../shared/Global/AppState.model';
+import { AppStateModel } from '../../../shared/Global/AppState.Model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class LoginformComponent implements OnInit {
   token:string | undefined;
 
   constructor(private formBuilder: FormBuilder,private apiService:SharedApiService,
-    private store:Store<AppStateModel>,private route:Router,private authservice:AuthService) {
+    private store:Store<AppStateModel>,private route:Router,private authservice:AuthService,private snackBar: MatSnackBar,) {
     this.myForm = this.formBuilder.group({
       email: ['', [Validators.required,this.customEmailValidator]],
       userPassword: ['', Validators.required]
@@ -34,6 +35,12 @@ export class LoginformComponent implements OnInit {
     console.log(this.token)
   }
   
+  showAlert(message:string)
+  {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+    });
+  }
 
   get emails()
   {
@@ -50,33 +57,41 @@ export class LoginformComponent implements OnInit {
     }
     return null;
   }
+  register(){
+    this.route.navigate([''])
+  }
 
   onSubmit() {
    try {
      if (this.myForm.valid){
       this.apiService.authenticateUser(this.myForm.value).subscribe(  
         (response) => {
+         // console.log(response);
           this.store.dispatch(setToken({value:response.token}))
           const decodedToken=jwtDecode(response.token)as DecodedToken;
+          // console.log(decodedToken);
+          sessionStorage.setItem("token",response.token)
           this.store.dispatch(setName({value:decodedToken.unique_name}));
           this.store.dispatch(setEmail({value:decodedToken.email}));
+          this.store.dispatch(setId({value:decodedToken.nameid}));
           this.authservice.Login();
-          alert('Authentication successful'); 
+          this.showAlert("Authentication successful");
           this.route.navigate(['/home'])    
         },
         (error) => {
-          console.error('POST error', error);
-          alert('Authentication failed');
+          // console.error('POST error', error);
+          this.showAlert('Authentication failed');
         }
       );
-      console.log(this.myForm.value);
+      // console.log(this.myForm.value);
         }
         else{
-          alert('Please fill in all the required fields.');
+          this.showAlert('Please fill in all the required fields.');
+
         }
     } catch (ex) {
-      console.error('Exception caught', ex);
-      alert('An unexpected error occurred');
+      // console.error('Exception caught', ex);
+      this.showAlert('An unexpected error occurred');
     }
 }
 }

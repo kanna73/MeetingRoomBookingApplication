@@ -12,6 +12,8 @@
         public DateTime? BookDate { get; set; }
         public string? LocationName { get; set; }
         public string? EmpName { get; set; }
+        public string? Imagepath { get; set; }
+
 
 
     }

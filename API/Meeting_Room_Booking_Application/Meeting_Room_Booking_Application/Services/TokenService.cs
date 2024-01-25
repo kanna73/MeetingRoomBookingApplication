@@ -23,7 +23,8 @@ namespace Meeting_Room_Booking_Application.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.Name,user.EmpName)
+                new Claim(ClaimTypes.Name,user.EmpName),
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
             };
 
             //Signature algorithm

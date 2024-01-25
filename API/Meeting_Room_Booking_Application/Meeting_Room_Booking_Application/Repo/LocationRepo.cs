@@ -1,6 +1,7 @@
 ﻿using Meeting_Room_Booking_Application.Interface.IRepo;
 using Meeting_Room_Booking_Application.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace Meeting_Room_Booking_Application.Repo
 {
@@ -18,5 +19,6 @@ namespace Meeting_Room_Booking_Application.Repo
             var result =await _dbContext.Locations.ToListAsync();
             return result;
         }
+
     }
 }

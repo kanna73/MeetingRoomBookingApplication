@@ -8,5 +8,6 @@ namespace Meeting_Room_Booking_Application.Interface.IService
     {
         Task<RegisterRequest> Register(RegisterRequest user);
         Task<LoginView> Login(LoginRequest loginRequest);
+        LoginView Loginsync(LoginRequest loginRequest);
     }
 }

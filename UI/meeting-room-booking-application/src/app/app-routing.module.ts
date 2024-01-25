@@ -4,6 +4,8 @@ import { LoginComponent } from './Pages/login/login.component';
 import { RegistrationComponent } from './Pages/registration/registration.component';
 import { HomeComponent } from './Pages/home/home.component';
 import { CanActivate } from '../Service/Authentication/auth.guard';
+import { MeetingFormComponentComponent } from './component/meeting-form-component/meeting-form-component.component';
+import { HeaderComponent } from './component/header/header.component';
 
 const routes: Routes = [
   {path:"",component:RegistrationComponent},

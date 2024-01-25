@@ -18,8 +18,16 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { HomeComponent } from './Pages/home/home.component';
 import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { HeaderComponent } from './component/header/header.component';
-import { BookingComponent } from './component/booking/booking.component';
 import { AppState } from '../shared/Global/App.state';
+import { MeetingFormComponentComponent } from './component/meeting-form-component/meeting-form-component.component';
+import { CommonModule, DatePipe } from '@angular/common';
+import { ProfileComponent } from './component/profile/profile.component';
+import { ViewComponent } from './component/view/view.component';
+import { RailwayTimePipe } from './custom-pipes/RailwayTimePipe';
+import { EffectsModule } from '@ngrx/effects';
+import { LocationEffects } from '../shared/Location/location.Effects';
+import { MyDatePipe } from './custom-pipes/MyDatePipe';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +40,9 @@ import { AppState } from '../shared/Global/App.state';
     HomeComponent,
     SidebarComponent,
     HeaderComponent,
-    BookingComponent,
+    MeetingFormComponentComponent,
+    ProfileComponent,
+    ViewComponent,
     
     ],
   imports: [
@@ -43,12 +53,14 @@ import { AppState } from '../shared/Global/App.state';
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
+    CommonModule,
     StoreModule.forRoot(AppState),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([LocationEffects])
 
     
   ],
-  providers: [],
+  providers: [DatePipe,RailwayTimePipe,MyDatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -29,25 +29,19 @@ namespace Meeting_Room_Booking_Application.Services
         {
             User newUser = _mapper.Map<User>(user);
 
-            RegisterRequest addedUser = null;
             using (var hmac = new HMACSHA512())
             {
                 newUser.Password = hmac.ComputeHash(Encoding.UTF8.GetBytes(user.UserPassword));
                 newUser.Hashkey = hmac.Key;
                 var resultUser = await _userRepo.addUser(newUser);
-                /*if (resultUser != null)
-                {*/
-                    addedUser = new RegisterRequest();
-                    addedUser.Email = resultUser.Email;
-                    return addedUser;
-                /*}
-                return null;*/
+                RegisterRequest addedUser = new RegisterRequest();
+                addedUser.Email = resultUser.Email;
+                return addedUser;
             }
         }
 
         public async Task<LoginView> Login(LoginRequest  loginRequest)
         {
-            LoginView user;
             var userData = await _userRepo.getById(loginRequest.Email);
             if (userData != null)
             {
@@ -58,11 +52,33 @@ namespace Meeting_Room_Booking_Application.Services
                     if (userPass[i] != userData.Password[i])
                          throw new NotFoundException("the user name or password incorrect");
                 }
-                user = new LoginView();
+                LoginView user = new LoginView();
                 user.Token = _tokenService.GenerateToken(userData);
                 return user;
             }
             throw new NotFoundException("the user name or password incorrect");
         }
+
+        public LoginView Loginsync(LoginRequest loginRequest)
+        {
+            var userData = _userRepo.GetByIdsync(loginRequest.Email);
+            if (userData != null)
+            {
+                using (var hmac = new HMACSHA512(userData.Hashkey))
+                {
+                    var userPass = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginRequest.UserPassword));
+                    for (int i = 0; i < userPass.Length; i++)
+                    {
+                        if (userPass[i] != userData.Password[i])
+                            throw new NotFoundException("The username or password is incorrect");
+                    }
+                }
+                LoginView user = new LoginView();
+                user.Token = _tokenService.GenerateToken(userData);
+                return user;
+            }
+            throw new NotFoundException("The username or password is incorrect");
+        }
+
     }
 }

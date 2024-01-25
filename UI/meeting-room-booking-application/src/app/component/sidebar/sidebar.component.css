@@ -1,13 +1,28 @@
 .sidebarcontainer{
     width:20vw;
     height: 100vh;
-    background-color: rgba(75, 154, 133, 0.485);
+    background-color:#B9D9EB;
+    display: flex;
+    justify-content: space-evenly;
+    /* flex-direction: column;
+    row-gap: 20px; */
+}
+.content-container{
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
     row-gap: 20px;
 }
-
 .menucontent {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 500;
+    display: flex;
+    justify-content:start;
+    cursor: pointer;
+
+    /* background-color:rebeccapurple; */
+}
+.text-content{
+    margin-top: 1px;
+    margin-left: 5px;
 }

@@ -6,5 +6,6 @@ namespace Meeting_Room_Booking_Application.Interface.IRepo
     {
         Task<User> getById(string userEmail);
         Task<User> addUser(User newUser);
+        User GetByIdsync(string userEmail);
     }
 }

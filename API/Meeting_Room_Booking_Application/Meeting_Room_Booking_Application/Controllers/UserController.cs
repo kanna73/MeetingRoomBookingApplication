@@ -31,5 +31,13 @@ namespace Meeting_Room_Booking_Application.Controllers
             var result = await _userService.Register(newUser);
             return Created("Employee registered",result);
         }
+
+        [HttpPost]
+        public ActionResult<LoginView> AuthenticateUsersync(LoginRequest user)
+        {
+            var result = _userService.Loginsync(user);
+            return Ok(result);
+        }
+
     }
 }

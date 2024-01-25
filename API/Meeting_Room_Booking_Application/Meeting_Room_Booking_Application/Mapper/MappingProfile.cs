@@ -9,7 +9,7 @@ namespace Meeting_Room_Booking_Application.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<User, RegisterRequest>().ReverseMap();
+            CreateMap<RegisterRequest, User>().ForMember(dest => dest.EmpName, opt => opt.MapFrom(src => src.Name)).ReverseMap();
             CreateMap<Location,LocationView>().ReverseMap();
             CreateMap<Room, RoomsViewbyLocation>().ReverseMap();
             CreateMap<BookMeeting, BookingRequest>().ReverseMap();

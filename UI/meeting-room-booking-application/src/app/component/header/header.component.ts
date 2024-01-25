@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppStateModel } from '../../../shared/Global/AppState.Model';
+import { AuthService } from '../../../Service/Authentication/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +10,17 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
+  display:any
+  
+  constructor(private auth:AuthService,private route:Router) {
+    
+  }
+  
+  logout()
+  {
+     this.auth.Logout();
+    this.route.navigate(['/login'])
+  }
+ 
 
 }

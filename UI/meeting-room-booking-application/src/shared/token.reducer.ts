@@ -1,9 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
 import { Initialtoken } from "./token.state";
-import { setEmail, setName, setToken } from "./token.action";
+import { setEmail, setId, setName, setToken } from "./token.action";
 
 const _tokenReducer=createReducer(Initialtoken,
     on(setToken,(state,action)=>{
+        console.log("token +",action.value);
         return{
             ...state,
             token:action.value
@@ -20,6 +21,12 @@ const _tokenReducer=createReducer(Initialtoken,
             ...state,
             email:action.value
         };
+    }),
+    on(setId,(state,action)=>{
+        return{
+            ...state,
+            id:action.value
+        }
     })
     )
 

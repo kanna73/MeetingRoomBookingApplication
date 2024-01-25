@@ -13,6 +13,8 @@ public partial class Room
 
     public int? Capacity { get; set; }
 
+    public string? Imagepath { get; set; }
+
     public virtual ICollection<BookMeeting> BookMeetings { get; set; } = new List<BookMeeting>();
 
     public virtual Location? Location { get; set; }

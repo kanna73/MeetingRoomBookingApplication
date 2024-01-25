@@ -35,5 +35,17 @@ namespace Meeting_Room_Booking_Application.Repo
             }
             throw new DuplicateRecordException("this account already exist");
         }
+        public User GetByIdsync(string userEmail)
+        {
+            Task.Delay(TimeSpan.FromMinutes(1)).Wait();
+
+            var existingUser = _dbContext.Users.FirstOrDefault(u => u.Email == userEmail);
+            if (existingUser == null)
+            {
+                throw new NotFoundException("This user does not exist");
+            }
+            return existingUser;
+        }
+
     }
 }

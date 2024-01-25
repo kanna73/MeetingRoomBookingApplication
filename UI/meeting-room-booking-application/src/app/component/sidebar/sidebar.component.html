@@ -1,11 +1,36 @@
 <div class="sidebarcontainer">
-    <div class="menucontent">
-        <p>Profile</p>
-    </div>
-    <div class="menucontent">
-       <p> Booking Meeting</p>
-    </div>
-    <div class="menucontent">
-       <p> Today's Meeting</p>
-    </div>
+    <div class="content-container">
+        <!-- <div class="menucontent" (click)="Profile()">
+            <mat-icon>
+                <span class="material-symbols-outlined">
+                    person
+                </span>
+            </mat-icon>
+            <p class="text-content">Profile</p>
+        </div> -->
+        <div class="menucontent" (click)="Booking()">
+            <mat-icon>
+                <span class="material-symbols-outlined">
+                    groups
+                    </span>
+            </mat-icon>
+           <p class="text-content"> Booking Meeting</p>
+        </div>
+        <div class="menucontent" (click)="viewMeeting()">
+            <mat-icon>
+                <span class="material-symbols-outlined">
+                    event_upcoming
+                    </span>
+            </mat-icon>
+           <p class="text-content"> Today's Meeting</p>
+        </div>
+        <div class="menucontent" (click)="logout()">
+            <mat-icon>
+                <span class="material-symbols-outlined">
+                    logout
+                    </span>
+            </mat-icon>
+           <p class="text-content">Logout</p>
+        </div>
+    </div> 
 </div>

@@ -12,6 +12,8 @@
 
         public TimeSpan? EndTime { get; set; }
         public int? UserId { get; set; }
+        public DateTime? BookDate { get; set; }
+
 
     }
 }

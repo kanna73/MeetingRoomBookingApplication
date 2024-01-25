@@ -1,0 +1,69 @@
+<!-- meeting-booking-form.component.html -->
+<mat-card class="whole-container">
+  <div class="heading">
+    <p class="heading-content">Book your Meeting</p>
+  </div>
+  <div class="form-outer-container">
+    <mat-card class="form-container">
+      <mat-card-title>Meeting Booking Form</mat-card-title>
+      <form [formGroup]="meetingForm" class="formBody">
+        <mat-form-field class="form-group">
+          <mat-label>Meeting Title</mat-label>
+          <input matInput type="text" id="meetingTitle" formControlName="meetingTitle">
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <mat-label>Location</mat-label>
+          <mat-select id="location" formControlName="location" (selectionChange)="onLocationSelected($event)">
+            <mat-option *ngFor="let location of locations" [value]="location.id">
+              {{ location.locationNames }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <mat-label>Meeting Room</mat-label>
+          <mat-select id="meetingRoom" formControlName="meetingRoom">
+            <mat-option *ngFor="let room of Rooms" [value]="room.id">
+              {{room.roomName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="form-group" (click)="openDatePicker(datepicker)">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="datepicker" [matDatepickerFilter]="dateFilter" (dateChange)="onDateSelected($event)" formControlName="bookdate" readonly>
+          <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker ></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <mat-label>Start Time</mat-label>
+          <input matInput [ngxTimepicker]="startTimePicker" formControlName="startTime" [min]="minTime" [max]="maxTime" readonly>
+          <mat-error *ngIf="startTimes?.touched && startTimes?.hasError('required')">
+            This field is required
+          </mat-error>
+          <mat-error *ngIf="startTimes?.touched && startTimes?.hasError('invalidStartTime')">
+          </mat-error>
+          <ngx-material-timepicker-toggle matSuffix [for]="startTimePicker"></ngx-material-timepicker-toggle>
+          <ngx-material-timepicker #startTimePicker ></ngx-material-timepicker>
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <mat-label>End Time</mat-label>
+          <input matInput [ngxTimepicker]="endTimePicker" formControlName="endTime"[min]="minEndTime" [max]="maxTime" readonly>
+          <mat-error *ngIf="endTimes?.touched && endTimes?.hasError('invalidEndTime')">
+            End time must be later than start time
+          </mat-error>
+          <ngx-material-timepicker-toggle matSuffix [for]="endTimePicker"></ngx-material-timepicker-toggle>
+          <ngx-material-timepicker #endTimePicker></ngx-material-timepicker>
+        </mat-form-field>
+        <div class="button-container">
+          <button color="primary" mat-raised-button class="book" (click)="check()">Check </button>
+          <div [matTooltip]="disableBookButton ? 'First check whether your meeting room is available' : ''">
+            <button color="primary" [disabled]="disableBookButton" mat-raised-button class="book" (click)="submitForm()">
+              Book Meeting
+            </button>
+          </div>
+        </div>      
+      </form>
+    </mat-card>
+  </div>
+</mat-card>
+
+  

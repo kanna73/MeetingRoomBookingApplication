@@ -24,9 +24,9 @@ public partial class MeetingApplicationContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { 
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=KANINI-LTP-556;Database=MeetingApplication;User Id=sa;Password=Kanna@5873;Encrypt=False;TrustServerCertificate=true");
 
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BookMeeting>(entity =>
@@ -36,9 +36,7 @@ public partial class MeetingApplicationContext : DbContext
             entity.ToTable("BookMeeting");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.BookDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("date");
+            entity.Property(e => e.BookDate).HasColumnType("date");
             entity.Property(e => e.MeetingId).HasColumnName("MeetingID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -65,6 +63,9 @@ public partial class MeetingApplicationContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Rooms__3214EC277E5F58B0");
 
             entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Imagepath)
+                .IsUnicode(false)
+                .HasColumnName("imagepath");
             entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
             entity.HasOne(d => d.Location).WithMany(p => p.Rooms)

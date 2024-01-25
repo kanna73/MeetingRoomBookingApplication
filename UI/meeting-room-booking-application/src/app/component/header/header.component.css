@@ -1,15 +1,9 @@
 .navcontainer{
-    display: flex;
-    justify-content: space-around;
-    column-gap: 1100px;
-    box-shadow: 2px 1px 3px 2px gray;
+    box-shadow: 0 5px 5px -5px gray;
+    height: 8vh;
 }
 .logo{
-    width:250px;
-    margin-top: 10px;
-}
-.logout{
-    margin-top: 20px;
-    width:100px;
-    height: 40px;
+    width:180px;
+    margin-top: 15px;
+    margin-left: 60px;
 }

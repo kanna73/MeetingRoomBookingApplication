@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedApiService } from '../../../Service/shared-api.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { setToken } from '../../../shared/token.action';
+import { AppModule } from '../../app.module';
+import { loadLoaction, setLocation } from '../../../shared/Location/location.action';
+import { getLocation } from '../../../shared/Location/loaction.selector';
+import { locationModel } from '../../../shared/Location/location.model';
+import { AppStateModel } from '../../../shared/Global/AppState.Model';
+import { locations } from '../../../shared/Location/location.state';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-registerform',
@@ -12,30 +19,80 @@ import { setToken } from '../../../shared/token.action';
 })
 export class RegisterformComponent implements OnInit {
   form:FormGroup;
-  locations: any[] | undefined;
+  locations: any;
+  anotherlocation :any;
 
 constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
-          private route:Router)
+          private route:Router,private store:Store<AppStateModel>,private snackBar: MatSnackBar)
  {
   this.form=this.formBuilder.group({
-    empName:['',Validators.required],
-    empNo:['',Validators.required],
-    email:['',Validators.required],
+    name:['',[Validators.required,this.customNameValidator]],
+    empNo:['',[Validators.required,this.customEmpCode]],
+    email:['',[Validators.required,this.customEmailValidator]],
     LocationId:['',Validators.required],
     userPassword:['',Validators.required]
 
   });
+
 }
   ngOnInit(){
-   this.apiservice.getLocation().subscribe((data)=>{
+  this.store.dispatch(loadLoaction()); 
+
+   this.store.select(getLocation).subscribe((data)=>{
     this.locations=data;
-   })
-   console.log(this.locations);
+  //  console.log("jcasckjabcb +",this.locations);
+  })
+  
+  }
+  showAlert(message:string)
+  {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+    });
+  }
+ 
+  customEmailValidator(email:AbstractControl){
+    const emailid=email.value;
+    if (!emailid.toLowerCase().endsWith('kanini.com')) {
+      return { 'invalidDomain': true };
+    }
+    return null;
   }
 
-  get getEmpname()
+  customEmpCode(empNo:AbstractControl)
   {
-    return this.form.get('empName');
+    const empCode=empNo.value;
+    const pattern= /^[1-9]\d{0,3}$/
+    if(!pattern.test(empCode))
+    {
+      return { 'invalidEmpCode':true}
+    }
+    return null;
+  }
+
+  customPassword(userPassword:AbstractControl)
+  {
+    const password=userPassword.value;
+    const pattern =/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/;
+    if(!pattern.test(password))
+    {
+      return {'invalidPassword':true}
+    }
+    return null;
+  }
+
+  customNameValidator(name:AbstractControl){
+    const empname=name.value;
+    const pattern =/^[a-zA-Z\s]*$/
+    if(!pattern.test(empname))
+    {
+      return{ 'invalidName' : true }
+    }
+    return null;
+  }
+  get getname()
+  {
+    return this.form.get('name');
   }
   get getEmpno(){
     return this.form.get('empno');
@@ -53,25 +110,25 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
   }
   onSubmit(){
     if (this.form.valid){
-    console.log(this.form.value);
+    //console.log(this.form.value);
     this.apiservice.register(this.form.value).subscribe(
       (response)=>{
-        console.log(response);
-        alert('Registration successful');     
+       // console.log(response);
+        this.showAlert("Registration successful");
+        this.route.navigate(['/login'])   
       },
       (error) => {
-        console.error('POST error', error);
-        alert('Registration failed');
+        //console.error('POST error', error);
+        this.showAlert("Registration failed");
       }
       )
     }
     else{
-      alert('Please fill in all the required fields.');
+      this.showAlert("Please fill in all the required fields.");
     }
   }
   login(){
     this.route.navigate(['/login'])
-
   }
   
 }

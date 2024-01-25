@@ -4,6 +4,12 @@
     {
         public int Id { get; set; }
 
-        public string? LocationName { get; set; }
+        public string? LocationNames { get; set; }
+
+        public LocationView( int id, string LocationName)
+        {
+            this.Id = id;
+            this.LocationNames = LocationName;
+        }
     }
 }

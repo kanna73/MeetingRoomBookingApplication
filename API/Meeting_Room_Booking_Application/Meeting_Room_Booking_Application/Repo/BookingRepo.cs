@@ -1,6 +1,7 @@
 ﻿using Meeting_Room_Booking_Application.Interface.IRepo;
 using Meeting_Room_Booking_Application.Models;
 using Meeting_Room_Booking_Application.ViewModels;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,10 +34,11 @@ namespace Meeting_Room_Booking_Application.Repo
             };
 
             await _dbContext.Database.ExecuteSqlRawAsync(
-                "EXEC UspCheckMeetingOverlap @InputStartTime, @InputEndTime, @InputMeetingID, @RecordExist OUTPUT",
+                "EXEC UspCheckMeetingOverlap @InputStartTime, @InputEndTime, @InputMeetingID,@InputDate,@RecordExist OUTPUT",
                 new SqlParameter("@InputStartTime", book.StartTime),
                 new SqlParameter("@InputEndTime", book.EndTime),
                 new SqlParameter("@InputMeetingID", book.MeetingId),
+                new SqlParameter ("@InputDate",book.BookDate),
                 recordExistParameter
             );
             bool recordExists = (bool)recordExistParameter.Value;
