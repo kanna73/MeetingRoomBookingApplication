@@ -37,6 +37,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SharedApiService } from '../../../Service/shared-api.service';
 import { MyDatePipe } from '../../custom-pipes/MyDatePipe';
 import { MatPaginator } from '@angular/material/paginator';
+import { AppStateModel } from '../../../shared/Global/AppState.Model';
+import { Store, select } from '@ngrx/store';
+import { loadMeeting } from '../../../shared/TodayMeeting/todaymeeting.action';
+import { Observable } from 'rxjs';
+import { todayMeetingList } from '../../../shared/TodayMeeting/todaymeeting.state';
 
 @Component({
   selector: 'app-view',
@@ -49,18 +54,39 @@ export class ViewComponent implements OnInit {
   todayMeeting: any[] = [];
   pagedMeetings: any[] = [];
   pageSize = 6;
+  meetingState$! :Observable<todayMeetingList>
+
 
   constructor(
     private apiService: SharedApiService,
-    private normalTimePipe: MyDatePipe
+    private normalTimePipe: MyDatePipe,
+    private store:Store<AppStateModel>
   ) {}
 
   ngOnInit() {
-    this.apiService.getTodayMeeting().subscribe((response) => {
-      this.todayMeeting = response;
-      console.log(response)
-      this.onPageChange({ pageIndex: 0, pageSize: this.pageSize }); // Set the initial page
-    });
+    // this.apiService.getTodayMeeting().subscribe((response) => {
+    //   this.todayMeeting = response;
+    //   console.log(response)
+    //   this.onPageChange({ pageIndex: 0, pageSize: this.pageSize }); 
+    // });
+    this.meetingState$ = this.store.pipe(select('meeting'))
+     this.GetTodayMeeting();
+  }
+
+  GetTodayMeeting(){
+    this.store.dispatch(loadMeeting());
+      this.meetingState$.subscribe((data)=>{
+      console.log("data ",data.meetingList);
+      if(data.meetingList)
+      {
+        this.todayMeeting =data.meetingList
+        this.onPageChange({ pageIndex: 0, pageSize: this.pageSize }); 
+      }
+      else{
+        alert("error occured");
+      }
+    })
+
   }
 
   onPageChange(event: any) {

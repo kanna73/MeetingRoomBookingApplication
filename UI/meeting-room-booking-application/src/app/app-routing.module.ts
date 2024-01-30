@@ -6,11 +6,13 @@ import { HomeComponent } from './Pages/home/home.component';
 import { CanActivate } from '../Service/Authentication/auth.guard';
 import { MeetingFormComponentComponent } from './component/meeting-form-component/meeting-form-component.component';
 import { HeaderComponent } from './component/header/header.component';
+import { NotfoundComponent } from './Pages/notfound/notfound.component';
 
 const routes: Routes = [
   {path:"",component:RegistrationComponent},
   {path:"login",component:LoginComponent},
-  {path:"home",component:HomeComponent,canActivate:[CanActivate]}
+  {path:"home",component:HomeComponent,canActivate:[CanActivate]},
+  {path:"**",component:NotfoundComponent}
 ];
 
 @NgModule({

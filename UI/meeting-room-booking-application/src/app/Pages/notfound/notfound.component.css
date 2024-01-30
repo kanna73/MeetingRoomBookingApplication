@@ -1,0 +1,9 @@
+.notfoundContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.notfound{
+    width:50vw;
+    height: 80vh;
+}

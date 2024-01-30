@@ -20,10 +20,9 @@ export class LocationEffects{
         exhaustMap(()=>{
             return this.service.getallLocation().pipe(
                 map((data) => setLocation({ value: data })),
-                catchError((_error)=>of(loadLoactionFail({Error:_error.message})))
+                catchError((_error)=>of(loadLoactionFail({Error:_error})))
             )
         }),
-
-     )
-   )
+     )  
+   )    
 }

@@ -3,9 +3,11 @@ import {locationModel} from './location.model';
 
 export interface locations{
     locationList:locationModel[],
-    ErrorText:string,
+    ErrorID:number,
+    ErrorMessage:string
     }
 export const locationState:locations={
     locationList:[],
-    ErrorText:''
+    ErrorID:0,
+    ErrorMessage:''
 }

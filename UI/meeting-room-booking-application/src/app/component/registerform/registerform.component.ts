@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedApiService } from '../../../Service/shared-api.service';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { setToken } from '../../../shared/token.action';
 import { AppModule } from '../../app.module';
 import { loadLoaction, setLocation } from '../../../shared/Location/location.action';
@@ -11,6 +11,9 @@ import { locationModel } from '../../../shared/Location/location.model';
 import { AppStateModel } from '../../../shared/Global/AppState.Model';
 import { locations } from '../../../shared/Location/location.state';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { RegisterModel } from '../../../shared/Register/register.model';
+import { registerRequest } from '../../../shared/Register/register.action';
 
 @Component({
   selector: 'app-registerform',
@@ -21,6 +24,8 @@ export class RegisterformComponent implements OnInit {
   form:FormGroup;
   locations: any;
   anotherlocation :any;
+  registerState$ ! :Observable<RegisterModel>;
+  loactionState$ !:Observable<locations>
 
 constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
           private route:Router,private store:Store<AppStateModel>,private snackBar: MatSnackBar)
@@ -31,8 +36,8 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
     email:['',[Validators.required,this.customEmailValidator]],
     LocationId:['',Validators.required],
     userPassword:['',Validators.required]
-
   });
+  this.registerState$ = store.pipe(select('register'));
 
 }
   ngOnInit(){
@@ -40,7 +45,6 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
 
    this.store.select(getLocation).subscribe((data)=>{
     this.locations=data;
-  //  console.log("jcasckjabcb +",this.locations);
   })
   
   }
@@ -111,18 +115,35 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
   onSubmit(){
     if (this.form.valid){
     //console.log(this.form.value);
-    this.apiservice.register(this.form.value).subscribe(
-      (response)=>{
-       // console.log(response);
+
+    this.store.dispatch(registerRequest({registerData:this.form.value}))
+    this.registerState$.subscribe((data)=>{
+      if(data.message!='')
+      {
         this.showAlert("Registration successful");
-        this.route.navigate(['/login'])   
-      },
-      (error) => {
-        //console.error('POST error', error);
-        this.showAlert("Registration failed");
+        this.route.navigate(['/login'])  
       }
-      )
-    }
+      else{
+        if(data.errorID==409)
+        {
+          this.showAlert(data.errorMessage);
+        }
+        else{
+          this.showAlert("Registration failed");
+        }
+
+      }
+    })
+    // this.apiservice.register(this.form.value).subscribe(
+    //   (response)=>{
+    //     this.showAlert("Registration successful");
+    //     this.route.navigate(['/login'])   
+    //   },
+    //   (error) => {
+    //     this.showAlert("Registration failed");
+    //   }
+    //   )
+     }
     else{
       this.showAlert("Please fill in all the required fields.");
     }

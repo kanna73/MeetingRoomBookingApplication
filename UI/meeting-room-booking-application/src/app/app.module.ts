@@ -27,6 +27,13 @@ import { RailwayTimePipe } from './custom-pipes/RailwayTimePipe';
 import { EffectsModule } from '@ngrx/effects';
 import { LocationEffects } from '../shared/Location/location.Effects';
 import { MyDatePipe } from './custom-pipes/MyDatePipe';
+import { BookingEffects } from '../shared/BookMeeting/bookingmeeting.effects';
+import { LoginEffects } from '../shared/Login/login.effects';
+import { NotfoundComponent } from './Pages/notfound/notfound.component';
+import { MeetingEffects } from '../shared/TodayMeeting/todaymeeting.effects';
+import { CheckEffects } from '../shared/Check/check.effects';
+import { RoomEffects } from '../shared/Room/room.effects';
+import { RegisterEffects } from '../shared/Register/register.effects';
 
 
 @NgModule({
@@ -43,6 +50,7 @@ import { MyDatePipe } from './custom-pipes/MyDatePipe';
     MeetingFormComponentComponent,
     ProfileComponent,
     ViewComponent,
+    NotfoundComponent,
     
     ],
   imports: [
@@ -56,9 +64,7 @@ import { MyDatePipe } from './custom-pipes/MyDatePipe';
     CommonModule,
     StoreModule.forRoot(AppState),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    EffectsModule.forRoot([LocationEffects])
-
-    
+    EffectsModule.forRoot([LocationEffects, BookingEffects, LoginEffects,MeetingEffects,CheckEffects,RoomEffects,RegisterEffects]),    
   ],
   providers: [DatePipe,RailwayTimePipe,MyDatePipe],
   bootstrap: [AppComponent]

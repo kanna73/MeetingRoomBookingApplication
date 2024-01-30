@@ -17,14 +17,16 @@ const _locationReducer=createReducer(locationState,
         return{
             ...state,
             locationList:action.value,
-            ErrorText:''
+            ErrorID:0,
+            ErrorMessage:''
         }
     }),
     on(loadLoactionFail,(state,action)=>{
         return{
             ...state,
             locationList:[],
-            ErrorText:action.Error
+            ErrorID:action.Error.error.ID,
+            ErrorMessage:action.Error.error.Message
         }
     })
     )

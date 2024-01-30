@@ -14,5 +14,5 @@ export const loadLoaction=createAction(LOAD_LOCATION);
 
 export const setLocation=createAction(LOAD_LOCATION_SUCCESS,props<{ value:locationModel[] }>()) ;  
 
-export const loadLoactionFail=createAction(LOAD_LOACTION_FAIL,props<{Error:string}>());
+export const loadLoactionFail=createAction(LOAD_LOACTION_FAIL,props<{Error:any}>());
 

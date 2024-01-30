@@ -5,9 +5,9 @@ import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors }
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormatTimeService } from '../../../Service/format-time-service.service';
 import { SharedApiService } from '../../../Service/shared-api.service';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AppStateModel } from '../../../shared/Global/AppState.Model';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { booking } from '../../Interface/bookinInterface';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { RailwayTimePipe } from '../../custom-pipes/RailwayTimePipe';
@@ -15,6 +15,12 @@ import { DatePipe } from '@angular/common';
 import { Route, Router } from '@angular/router';
 import { setBooking, setProfile, setView } from '../../../shared/Global/Render_redux/condition.action';
 import { MyDatePipe } from '../../custom-pipes/MyDatePipe';
+import { postRequest } from '../../../shared/BookMeeting/bookmeeting.action';
+import { BookingPostState } from '../../../shared/BookMeeting/bookmeeting.model';
+import { CheckModel } from '../../../shared/Check/check.model';
+import { loadCheckRequest } from '../../../shared/Check/check.action';
+import { roomList } from '../../../shared/Room/room.state';
+import { loadRoomRequest } from '../../../shared/Room/room.action';
 
 @Component({
   selector: 'app-meeting-form-component',
@@ -32,6 +38,9 @@ export class MeetingFormComponentComponent implements OnInit {
   minTime: string = ''; // Minimum allowed time
   maxTime: string = '23:59';
   minEndTime:string='';
+  postState$ !:Observable<BookingPostState>;
+  checkState$! :Observable<CheckModel>;
+  roomState$! :Observable<roomList>;
 
 
   constructor(
@@ -53,8 +62,9 @@ export class MeetingFormComponentComponent implements OnInit {
       userId: [0],
       bookdate: ['', Validators.required]
     });
-     
-    
+     this.postState$ = store.pipe(select('booking'));
+     this.checkState$ = store.pipe(select('check'));
+     this.roomState$ = store.pipe(select('room'));
   }
 
   ngOnInit() {
@@ -65,8 +75,6 @@ export class MeetingFormComponentComponent implements OnInit {
       this.meetingForm.patchValue({ userId: data.id });
       this.id = +data.id;
     })
-    
-    
   }
   resetForm() {
     this.meetingForm.reset({
@@ -160,7 +168,7 @@ export class MeetingFormComponentComponent implements OnInit {
   }
 
 
-  changeRequestFormat(): booking {
+  changeRequestFormat(): any {
     const formValue = this.meetingForm.value;
     const { location, ...formValuesWithoutLocation } = formValue;
 
@@ -172,7 +180,7 @@ export class MeetingFormComponentComponent implements OnInit {
       userId: this.id || 0,
       bookDate: this.formatDate(this.meetingForm.value.bookdate) || ''
     };
-   // console.log("formated data" + this.requestData.endTime)
+    console.log("formated data" + this.requestData)
     return (this.requestData);
   }
 
@@ -186,19 +194,29 @@ export class MeetingFormComponentComponent implements OnInit {
    check() {
    // console.log('Form submitted:', this.meetingForm.value);
     if (this.meetingForm.valid) {
-      const sendData = this.changeRequestFormat();
-      //console.log("send data" + sendData);
-      this.apiservice.checkAvailablity(sendData).subscribe((data) => {
-       // console.log('result:' + data);
-        this.disableBookButton = !data;
-        if(data)
+      // const sendData = this.changeRequestFormat();
+      // this.apiservice.checkAvailablity(sendData).subscribe((data) => {
+      //   this.disableBookButton = !data;
+      //   if(data)
+      //   {
+      //     this.showAlert("this meeting room is available");
+      //   }
+      //   else{
+      //     this.showAlert("this meeting room is unavailable");
+      //   }
+      // });
+      console.log("data from component ",this.changeRequestFormat())
+      this.store.dispatch(loadCheckRequest({requestData:this.changeRequestFormat()}));
+      this.checkState$.subscribe((checkState)=>{
+        this.disableBookButton = !checkState.valid;
+        if(checkState.valid)
         {
           this.showAlert("this meeting room is available");
         }
         else{
           this.showAlert("this meeting room is unavailable");
         }
-      });
+      })
      
     } else {
       this.showAlert("Please fill in all the required fields");
@@ -209,22 +227,52 @@ export class MeetingFormComponentComponent implements OnInit {
   onLocationSelected(event: any): void {
     const selectedLocationId = event.value;
    // console.log('Selected Location ID:', selectedLocationId);
-    this.apiservice.getMeetingRoom(selectedLocationId).subscribe((data) => {
-      this.Rooms = data;
-    });
+    // this.apiservice.getMeetingRoom(selectedLocationId).subscribe((data) => {
+    //   this.Rooms = data;
+    // });
+    this.store.dispatch(loadRoomRequest({Id:selectedLocationId}));
+    this.roomState$.subscribe((data)=>{
+        if(data.error=='')
+        {
+          this.Rooms = data.roomlist;
+        }
+    })
   }
   postData() {
    // console.log("working")
-    this.apiservice.addBooking(this.changeRequestFormat()).subscribe((data) => {
-      if (data != null) {
-        //console.log(data);
+    // this.apiservice.addBooking(this.changeRequestFormat()).subscribe((data) => {
+    //   if (data != null) {
+    //     this.disableBookButton = false;
+    //     this.resetForm();
+    //     this.store.dispatch(setProfile({value:false}));
+    //     this.store.dispatch(setBooking({value:false}));
+    //     this.store.dispatch(setView({value:true}));
+    //     this.showAlert("Form submitted successfully!");
+
+    //   }
+    // })
+    console.log("data submit",this.changeRequestFormat())
+    const book= this.changeRequestFormat();
+    // this.store.dispatch(postRequest({data:book}));
+    this.store.dispatch(postRequest({data:book}));
+    this.postState$.subscribe((poststate) =>{
+      console.log("post ",poststate);
+      if(poststate.message!='')
+      {
+        console.log("the success ",poststate.message);
+        console.log("the fail ",poststate.error)
         this.disableBookButton = false;
         this.resetForm();
         this.store.dispatch(setProfile({value:false}));
         this.store.dispatch(setBooking({value:false}));
         this.store.dispatch(setView({value:true}));
         this.showAlert("Form submitted successfully!");
-
+      }
+      if(poststate.error!='')
+      {
+        console.log("the success ",poststate.message);
+        console.log("the fail ",poststate.error)
+        this.showAlert(" error occured");
       }
     })
   }
@@ -232,7 +280,7 @@ export class MeetingFormComponentComponent implements OnInit {
     if (this.meetingForm.valid) {
      // console.log('Form submitted:', this.changeRequestFormat());
       this.postData();
-      this.showAlert('Form submitted successfully!');
+      // this.showAlert('Form submitted successfully!');
     } else {
       this.showAlert('Please fill in all the required fields.');
     }
