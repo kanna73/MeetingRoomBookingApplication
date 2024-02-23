@@ -41,5 +41,17 @@
     border-radius: 10px;
     font-size: 20px;
   }
+
+  @media screen and (min-width:370px) and (max-width:450px) {
+    .whole-container{
+      width:auto;
+    }
+    .form-container{
+      width:auto;
+    }
+    .heading-content{
+      font-size: 16px;
+    }
+  }
   
   

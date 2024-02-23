@@ -26,3 +26,21 @@
     margin-top: 1px;
     margin-left: 5px;
 }
+
+
+@media screen and (min-width:370px) and (max-width:450px) {
+
+    .sidebarcontainer{
+        position: absolute;
+        top:0px;
+        left:0px;
+        z-index: 1;
+        width:auto
+    }
+    /* .content-container{
+        position: absolute;
+        top:0;
+        left:500px;
+    } */
+}
+

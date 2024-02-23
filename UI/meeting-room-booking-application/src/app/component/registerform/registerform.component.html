@@ -1,68 +1,68 @@
 <div class="condition" *ngIf="!locations.ErrorText">
-<div class="formContainer">
-    <div class="registercontainer">
-    <div class="registerForm">
-    <img  class="logo" src="../../../assets/Kanini_logo.png" alt="logo">
-    <p class="subheading">Sign Up</p>
-    <form [formGroup]="form">
-        <mat-form-field class ="nameField" appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput class="empname" matInput type="text" formControlName="name">
-            <mat-hint class="error" *ngIf="getname?.touched && getname?.hasError('required')">
-                Name field is required!
-            </mat-hint>
-            <mat-hint class="error" *ngIf="getname?.touched && getname?.hasError('invalidName')">
-                Name field should have only letters!
-            </mat-hint>
-        </mat-form-field>
-        <mat-form-field class ="EmpnoField" appearance="fill">
-            <mat-label>Employee code</mat-label>
-            <input matInput class="empcode" matInput type="text" formControlName="empNo">
-            <mat-hint class="error" *ngIf="getEmpno?.touched && getEmpno?.hasError('required')">
-                Employee number is required!
-            </mat-hint>
-            <mat-hint class="error" *ngIf="getEmpno?.touched && getEmpno?.hasError('invalidEmpCode')">
-                Employee number should be 4 digits only!
-            </mat-hint>
-        </mat-form-field>
-        <mat-form-field class="emailfield" appearance="fill">
-            <mat-label>Email</mat-label>
-            <input matInput  class ="email" matInput type="text" formControlName="email">
-            <mat-hint class="error" *ngIf="getEmail?.touched && getEmail?.hasError('required')">
-                Email is required!
-            </mat-hint>
-            <mat-hint  class="error" *ngIf="getEmail?.touched && getEmail?.hasError('invalidDomain')">
-                Domain name should be Kanini
-            </mat-hint>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="locationField">
-            <mat-label>Select a location</mat-label>
-            <mat-select formControlName="LocationId">
-              <mat-option *ngFor="let location of locations.locationList" [value]="location.id">
-                {{ location.locationNames }}
-              </mat-option>
-            </mat-select>
-            <mat-hint class="error" *ngIf="getLocation?.touched && getLocation?.hasError('required')">
-                Location is required!
-            </mat-hint>
-          </mat-form-field>
-        <mat-form-field class="passwordfield" appearance="fill">
-            <mat-label>Password</mat-label>
-            <input matInput  class="passwordbox" matInput type="password" formControlName="userPassword">
-            <mat-hint class="error" *ngIf="getPassword?.touched && getPassword?.hasError('requried')">
-                Password is required!
-            </mat-hint>
-            <mat-hint class="error" *ngIf="getPassword?.touched && getPassword?.hasError('invalidPassword')">
-                Password is required!
-            </mat-hint>
-          </mat-form-field>
-          <div class="buttongroup">
-            <button mat-raised-button class="sumbitButton" color="primary" type="submit" (click)="onSubmit()">Sign Up</button>
-          </div>
-          <p class="login">Already have an account? <span class="loginClick" (click)="login()">Login Here</span></p>
-    </form>
-</div>
+    <div class="formContainer">
+        <div class="registercontainer">
+            <div class="registerForm">
+                <img class="logo" src="../../../assets/Kanini_logo.png" alt="logo">
+                <p class="subheading">Sign Up</p>
+                <form [formGroup]="form">
+                    <mat-form-field class="nameField" >
+                        <mat-label>Name</mat-label>
+                        <input matInput class="empname" matInput type="text" formControlName="name">
+                        <mat-hint class="error" *ngIf="getname?.touched && getname?.hasError('required')">
+                            Name field is required!
+                        </mat-hint>
+                        <mat-hint class="error" *ngIf="getname?.touched && getEmpno?.dirty && getname?.hasError('invalidName')">
+                            Name field should have only letters!
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field class="EmpnoField" >
+                        <mat-label>Employee code</mat-label>
+                        <input matInput class="empcode" matInput type="text" formControlName="empNo">
+                        <mat-hint class="error" *ngIf="getEmpno?.touched && getEmpno?.hasError('required')">
+                            Employee number is required!
+                        </mat-hint>
+                        <mat-hint class="error" *ngIf="getEmpno?.touched && getEmpno?.dirty  && getEmpno?.hasError('invalidEmpCode')">
+                            Employee number should be 4 digits only!
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field class="emailfield" >
+                        <mat-label>Email</mat-label>
+                        <input matInput class="email" matInput type="text" formControlName="email">
+                        <mat-hint  class="error" *ngIf="getEmail?.touched && getEmail?.hasError('required')">
+                            Email is required!
+                        </mat-hint>
+                        <mat-hint  class="error" *ngIf="getEmail?.touched && getEmpno?.dirty && getEmail?.hasError('invalidDomain')">
+                            Domain name should be Kanini
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="locationField">
+                        <mat-label>Select a location</mat-label>
+                        <mat-select formControlName="LocationId">
+                            <mat-option *ngFor="let location of locations" [value]="location.id">
+                                {{ location.locationNames }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-hint class="error" *ngIf="getLocation?.touched && getLocation?.hasError('required')">
+                            Location is required!
+                        </mat-hint>
+                    </mat-form-field>
+                    <mat-form-field class="passwordfield" >
+                        <mat-label>Password</mat-label>
+                        <input matInput class="passwordbox" matInput type="password" formControlName="userPassword">
+                        <mat-hint class="error"
+                            *ngIf="getPassword?.touched && getPassword?.hasError('invalidPassword')">
+                            Password must be at least 6 characters long and include at least one special character, one
+                            digit, and one uppercase letter. </mat-hint>
+                    </mat-form-field>
+                    <div class="buttongroup">
+                        <button mat-raised-button class="sumbitButton" color="primary" type="submit"
+                            (click)="onSubmit()">Sign Up</button>
+                    </div>
+                    <p class="login">Already have an account? <span class="loginClick" (click)="login()">Login
+                            Here</span></p>
+                </form>
+            </div>
+        </div>
+
     </div>
-  
-</div>
 </div>

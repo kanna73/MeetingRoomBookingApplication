@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { SharedApiService } from '../../../Service/shared-api.service';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -27,27 +27,31 @@ export class RegisterformComponent implements OnInit {
   registerState$ ! :Observable<RegisterModel>;
   loactionState$ !:Observable<locations>
 
-constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
-          private route:Router,private store:Store<AppStateModel>,private snackBar: MatSnackBar)
+constructor(private formBuilder:FormBuilder,
+            private apiservice:SharedApiService,
+            private route:Router,
+            private store:Store<AppStateModel>,
+            private snackBar: MatSnackBar
+            )
  {
   this.form=this.formBuilder.group({
     name:['',[Validators.required,this.customNameValidator]],
-    empNo:['',[Validators.required,this.customEmpCode]],
+    empNo:['',[Validators.required,this.customEmpCodeValidator]],
     email:['',[Validators.required,this.customEmailValidator]],
     LocationId:['',Validators.required],
-    userPassword:['',Validators.required]
+    userPassword:['',[Validators.required,this.customPassword]]
   });
   this.registerState$ = store.pipe(select('register'));
-
 }
+
   ngOnInit(){
   this.store.dispatch(loadLoaction()); 
-
    this.store.select(getLocation).subscribe((data)=>{
     this.locations=data;
-  })
-  
+  })  
   }
+  
+
   showAlert(message:string)
   {
     this.snackBar.open(message, 'Close', {
@@ -63,14 +67,15 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
     return null;
   }
 
-  customEmpCode(empNo:AbstractControl)
+  customEmpCodeValidator(empNo:AbstractControl)
   {
     const empCode=empNo.value;
-    const pattern= /^[1-9]\d{0,3}$/
+    const pattern= /^[1-9]\d{3}$/
     if(!pattern.test(empCode))
     {
-      return { 'invalidEmpCode':true}
+      return {'invalidEmpCode':true}
     }
+
     return null;
   }
 
@@ -80,6 +85,7 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
     const pattern =/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/;
     if(!pattern.test(password))
     {
+
       return {'invalidPassword':true}
     }
     return null;
@@ -87,7 +93,7 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
 
   customNameValidator(name:AbstractControl){
     const empname=name.value;
-    const pattern =/^[a-zA-Z\s]*$/
+    const pattern =/^[a-zA-Z]*$/
     if(!pattern.test(empname))
     {
       return{ 'invalidName' : true }
@@ -99,7 +105,7 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
     return this.form.get('name');
   }
   get getEmpno(){
-    return this.form.get('empno');
+    return this.form.get('empNo');
   }
   get getEmail()
   {
@@ -113,9 +119,8 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
     return this.form.get('userPassword');
   }
   onSubmit(){
+    console.log(this.form);
     if (this.form.valid){
-    //console.log(this.form.value);
-
     this.store.dispatch(registerRequest({registerData:this.form.value}))
     this.registerState$.subscribe((data)=>{
       if(data.message!='')
@@ -131,19 +136,9 @@ constructor(private formBuilder:FormBuilder,private apiservice:SharedApiService,
         else{
           this.showAlert("Registration failed");
         }
-
       }
     })
-    // this.apiservice.register(this.form.value).subscribe(
-    //   (response)=>{
-    //     this.showAlert("Registration successful");
-    //     this.route.navigate(['/login'])   
-    //   },
-    //   (error) => {
-    //     this.showAlert("Registration failed");
-    //   }
-    //   )
-     }
+    }
     else{
       this.showAlert("Please fill in all the required fields.");
     }

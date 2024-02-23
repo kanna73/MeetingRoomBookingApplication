@@ -21,11 +21,6 @@ namespace Meeting_Room_Booking_Application.Services
         public async Task<List<RoomsViewbyLocation>> getRoomByLocation(int locationId)
         {
             var result = await _roomRepo.getRoomByLocation(locationId);
-            foreach(var r in result)
-            {
-                var lazy = r.BookMeetings;
-                Console.WriteLine(lazy);
-            }
             if (result.Count == 0) 
             {
                 throw new NotFoundException("There is no Room in this Location");

@@ -25,14 +25,22 @@ export class LoginformComponent implements OnInit {
   token: string | undefined;
   loginPostState$ !:Observable<LoginState>
 
-  constructor(private formBuilder: FormBuilder, private apiService: SharedApiService,
-    private store: Store<AppStateModel>, private route: Router, private authservice: AuthService, private snackBar: MatSnackBar,) {
+  constructor(private formBuilder: FormBuilder,
+              private apiService: SharedApiService,
+              private store: Store<AppStateModel>,
+              private route: Router, 
+              private authservice: AuthService, 
+              private snackBar: MatSnackBar,) 
+  {
+    
     this.myForm = this.formBuilder.group({
       email: ['', [Validators.required, this.customEmailValidator]],
-      userPassword: ['', Validators.required]
+      userPassword: ['', [Validators.required,this.customPassword]]
     });
     this.loginPostState$=store.pipe(select('login'))
+    
   }
+
   ngOnInit() {
     this.store.select('token').subscribe((data) => {
       this.token = data.token;
@@ -43,6 +51,7 @@ export class LoginformComponent implements OnInit {
   showAlert(message: string) {
     this.snackBar.open(message, 'Close', {
       duration: 3000,
+      panelClass: 'custom-snackbar'
     });
   }
 
@@ -59,43 +68,40 @@ export class LoginformComponent implements OnInit {
     }
     return null;
   }
+  customPassword(userPassword:AbstractControl)
+  {
+    const password=userPassword.value;
+    const pattern =/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/;
+    if(!pattern.test(password))
+    {
+      return {'invalidPassword':true}
+    }
+    return null;
+  }
   register() {
     this.route.navigate([''])
   }
 
+  TokenDecoder(token:string){
+                    
+    const decodedToken = jwtDecode(token) as DecodedToken;                 
+    sessionStorage.setItem("token", token);
+    this.store.dispatch(setName({ value: decodedToken.unique_name })); 
+    this.store.dispatch(setEmail({ value: decodedToken.email }));  
+    this.store.dispatch(setId({ value: decodedToken.nameid }));
+  }
+
   onSubmit() {
-    try {
       if (this.myForm.valid) {
-        // this.apiService.authenticateUser(this.myForm.value).subscribe(
-        //   (response) => {
-        //     this.store.dispatch(setToken({ value: response.token }))
-        //     const decodedToken = jwtDecode(response.token) as DecodedToken;
-        //     sessionStorage.setItem("token", response.token)
-        //     this.store.dispatch(setName({ value: decodedToken.unique_name }));
-        //     this.store.dispatch(setEmail({ value: decodedToken.email }));
-        //     this.store.dispatch(setId({ value: decodedToken.nameid }));
-        //     this.authservice.Login();
-        //     this.showAlert("Authentication successful");
-        //     this.route.navigate(['/home'])
-        //   },
-        //   (error) => {
-        //     this.showAlert('Authentication failed');
-        //   }
-        // );
         this.store.dispatch(loginRequest({data:this.myForm.value}));
         this.loginPostState$.subscribe((loginstate)=>{
               console.log("login state ",loginstate)
               if(loginstate.token!='')
-              {
-                    
-                    const decodedToken = jwtDecode(loginstate.token) as DecodedToken;
-                    sessionStorage.setItem("token", loginstate.token)
-                    this.store.dispatch(setName({ value: decodedToken.unique_name }));
-                    this.store.dispatch(setEmail({ value: decodedToken.email }));
-                    this.store.dispatch(setId({ value: decodedToken.nameid }));
-                    this.authservice.Login();
-                    this.showAlert("Authentication successful");
-                    this.route.navigate(['/home'])
+              {  
+                this.TokenDecoder(loginstate.token);
+                this.authservice.Login();
+                this.showAlert("Authentication successful");
+                this.route.navigate(['/home'])
               }
               else{
                 if(loginstate.ID==404)
@@ -110,11 +116,7 @@ export class LoginformComponent implements OnInit {
       }
       else {
         this.showAlert('Please fill in all the required fields.');
-
       }
-    } catch (ex) {
-      this.showAlert('An unexpected error occurred');
-    }
   }
 }
 

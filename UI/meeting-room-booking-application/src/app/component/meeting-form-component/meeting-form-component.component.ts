@@ -3,7 +3,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormatTimeService } from '../../../Service/format-time-service.service';
+// import { FormatTimeService } from '../../../Service/format-time-service.service';
 import { SharedApiService } from '../../../Service/shared-api.service';
 import { Observable, of } from 'rxjs';
 import { AppStateModel } from '../../../shared/Global/AppState.Model';
@@ -21,6 +21,10 @@ import { CheckModel } from '../../../shared/Check/check.model';
 import { loadCheckRequest } from '../../../shared/Check/check.action';
 import { roomList } from '../../../shared/Room/room.state';
 import { loadRoomRequest } from '../../../shared/Room/room.action';
+import { loadLoaction } from '../../../shared/Location/location.action';
+import { getLocation } from '../../../shared/Location/loaction.selector';
+import { jwtDecode } from 'jwt-decode';
+import { DecodedToken } from '../../Interface/Itoken';
 
 @Component({
   selector: 'app-meeting-form-component',
@@ -29,7 +33,7 @@ import { loadRoomRequest } from '../../../shared/Room/room.action';
 })
 export class MeetingFormComponentComponent implements OnInit {
   meetingForm: FormGroup;
-  locations: any[] | undefined;
+  locations : any;
   Rooms: any[] | undefined;
   id: number | undefined;
   requestData: booking | undefined;
@@ -46,7 +50,7 @@ export class MeetingFormComponentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private formatTimeService: FormatTimeService,
+    // private formatTimeService: FormatTimeService,
     private apiservice: SharedApiService,
     private store: Store<AppStateModel>,
     private railwayTimePipe: RailwayTimePipe,
@@ -68,13 +72,18 @@ export class MeetingFormComponentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.apiservice.getLocation().subscribe((data) => {
-      this.locations = data;
-    });
-    this.store.select('token').subscribe((data) => {
-      this.meetingForm.patchValue({ userId: data.id });
-      this.id = +data.id;
-    })
+    this.store.dispatch(loadLoaction()); 
+    this.store.select(getLocation).subscribe((data)=>{
+     this.locations=data;
+   })
+    // this.store.select('token').subscribe((data) => {
+    //   this.meetingForm.patchValue({ userId: data.id });
+    //   this.id = data.id;
+    // })
+    const token = sessionStorage.getItem('token') ||''
+    const decodedToken = jwtDecode(token) as DecodedToken;  
+    this.id=decodedToken.nameid                
+
   }
   resetForm() {
     this.meetingForm.reset({
@@ -100,29 +109,15 @@ export class MeetingFormComponentComponent implements OnInit {
     }
     else{
       this.minTime='12:00 AM';
-
     }
-    
-    
   }
   
   private isPastDateTime=(startTime: AbstractControl)=>{
-    const today = new Date();
-    // const formatedCurrentDate= this.datePipe.transform(today, 'yyyy-MM-dd');
-    // const selectedDate= this.datePipe.transform(this.meetingForm.value.bookdate,'yyyy-MM-dd');
-    
-
+      const today = new Date();
       const date = new Date(`2024-01-01 ${startTime.value}`);
       this.minEndTime = this.datePipe.transform(date, 'HH:mm') ?? '';
-      // console.log("min end time "+this.minEndTime);
-  
-      // const CurrentTime =this.datePipe.transform(today, 'HH:mm:ss') ?? '';
-      // const formatedCurrentTime = this.railwayTimePipe.transform(CurrentTime);
-     
-      //const selectedStartTime =this.railwayTimePipe.transform(startTime.value);
-   
-   
   }
+
   dateFilter = (date: Date | null): boolean => {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0); 
@@ -146,16 +141,11 @@ export class MeetingFormComponentComponent implements OnInit {
   private validateEndTime(endTime: AbstractControl): ValidationErrors | null {
     const EndTime = endTime.value;
     const startTime = this.meetingForm.get('startTime')?.value;
-
-
     const formattedStartTime = this.railwayTimePipe.transform(startTime);
     const formattedEndTime = this.railwayTimePipe.transform(EndTime);
     if (formattedEndTime <= formattedStartTime) {
       return { 'invalidEndTime': true };
     }
-
-   // console.log('if not working');
-
     return null;
   }
 
@@ -171,7 +161,6 @@ export class MeetingFormComponentComponent implements OnInit {
   changeRequestFormat(): any {
     const formValue = this.meetingForm.value;
     const { location, ...formValuesWithoutLocation } = formValue;
-
     this.requestData = {
       meetingId: formValuesWithoutLocation.meetingRoom || 0,
       meetingTitle: formValuesWithoutLocation.meetingTitle || '',
@@ -192,19 +181,8 @@ export class MeetingFormComponentComponent implements OnInit {
   }
 
    check() {
-   // console.log('Form submitted:', this.meetingForm.value);
+    debugger;
     if (this.meetingForm.valid) {
-      // const sendData = this.changeRequestFormat();
-      // this.apiservice.checkAvailablity(sendData).subscribe((data) => {
-      //   this.disableBookButton = !data;
-      //   if(data)
-      //   {
-      //     this.showAlert("this meeting room is available");
-      //   }
-      //   else{
-      //     this.showAlert("this meeting room is unavailable");
-      //   }
-      // });
       console.log("data from component ",this.changeRequestFormat())
       this.store.dispatch(loadCheckRequest({requestData:this.changeRequestFormat()}));
       this.checkState$.subscribe((checkState)=>{
@@ -216,8 +194,7 @@ export class MeetingFormComponentComponent implements OnInit {
         else{
           this.showAlert("this meeting room is unavailable");
         }
-      })
-     
+      })  
     } else {
       this.showAlert("Please fill in all the required fields");
     }
@@ -226,10 +203,6 @@ export class MeetingFormComponentComponent implements OnInit {
  
   onLocationSelected(event: any): void {
     const selectedLocationId = event.value;
-   // console.log('Selected Location ID:', selectedLocationId);
-    // this.apiservice.getMeetingRoom(selectedLocationId).subscribe((data) => {
-    //   this.Rooms = data;
-    // });
     this.store.dispatch(loadRoomRequest({Id:selectedLocationId}));
     this.roomState$.subscribe((data)=>{
         if(data.error=='')
@@ -239,21 +212,8 @@ export class MeetingFormComponentComponent implements OnInit {
     })
   }
   postData() {
-   // console.log("working")
-    // this.apiservice.addBooking(this.changeRequestFormat()).subscribe((data) => {
-    //   if (data != null) {
-    //     this.disableBookButton = false;
-    //     this.resetForm();
-    //     this.store.dispatch(setProfile({value:false}));
-    //     this.store.dispatch(setBooking({value:false}));
-    //     this.store.dispatch(setView({value:true}));
-    //     this.showAlert("Form submitted successfully!");
-
-    //   }
-    // })
     console.log("data submit",this.changeRequestFormat())
     const book= this.changeRequestFormat();
-    // this.store.dispatch(postRequest({data:book}));
     this.store.dispatch(postRequest({data:book}));
     this.postState$.subscribe((poststate) =>{
       console.log("post ",poststate);
@@ -278,9 +238,7 @@ export class MeetingFormComponentComponent implements OnInit {
   }
   submitForm() {
     if (this.meetingForm.valid) {
-     // console.log('Form submitted:', this.changeRequestFormat());
       this.postData();
-      // this.showAlert('Form submitted successfully!');
     } else {
       this.showAlert('Please fill in all the required fields.');
     }

@@ -8,5 +8,6 @@ namespace Meeting_Room_Booking_Application.Interface.IService
         Task<List<LocationView>> getAllLocation();
         Task<List<Location>> SimulateDatabaseCallsync();
         List<Location> SimulateDatabaseCall();
+        Task<List<LocationView>> getLocationById(int id);
     }
 }

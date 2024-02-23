@@ -51,6 +51,7 @@ import { RegisterEffects } from '../shared/Register/register.effects';
     ProfileComponent,
     ViewComponent,
     NotfoundComponent,
+    MyDatePipe
     
     ],
   imports: [
@@ -63,7 +64,7 @@ import { RegisterEffects } from '../shared/Register/register.effects';
     MaterialModule,
     CommonModule,
     StoreModule.forRoot(AppState),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: isDevMode() }),
     EffectsModule.forRoot([LocationEffects, BookingEffects, LoginEffects,MeetingEffects,CheckEffects,RoomEffects,RegisterEffects]),    
   ],
   providers: [DatePipe,RailwayTimePipe,MyDatePipe],

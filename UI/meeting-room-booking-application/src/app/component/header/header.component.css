@@ -1,9 +1,24 @@
 .navcontainer{
     box-shadow: 0 5px 5px -5px gray;
     height: 8vh;
+    display: flex;
 }
 .logo{
     width:180px;
     margin-top: 15px;
     margin-left: 60px;
+}
+.menu{
+    display: none;
+}
+
+@media screen and (min-width:370px) and (max-width:450px) {
+    .logo{
+        margin-top: 5px;
+        margin-left: 30px;
+
+    }
+    .menu{
+        display:contents;
+    }
 }

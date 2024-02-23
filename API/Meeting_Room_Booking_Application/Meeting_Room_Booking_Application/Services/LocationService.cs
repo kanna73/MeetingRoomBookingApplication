@@ -64,5 +64,13 @@ namespace Meeting_Room_Booking_Application.Services
 
             return result;
         }
+
+        public async Task<List<LocationView>> getLocationById(int id)
+        {
+            var locations = await _locationRepo.getLoactionByID(id);
+            var result = _mapper.Map<List<LocationView>>(locations);
+            return result;
+
+        }
     }
 }

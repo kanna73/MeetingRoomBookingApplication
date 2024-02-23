@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { setBooking, setProfile, setView } from "./condition.action";
+import { setBooking, setProfile, setSide, setView } from "./condition.action";
 import { conditionRendering } from "./condition.state";
 
 const _conditionReducer=createReducer(conditionRendering,
@@ -19,6 +19,12 @@ const _conditionReducer=createReducer(conditionRendering,
         return {
             ...state,
             view:action.value
+        }
+    }),
+    on(setSide,(state,action)=>{
+        return{
+            ...state,
+            sidebar:action.value
         }
     })
     )

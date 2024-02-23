@@ -44,7 +44,6 @@ import { AppStateModel } from '../../shared/Global/AppState.Model';
   providedIn: 'root'
 })
 export class AuthService {
-  // Initialize isLogged based on sessionStorage
   isLogged: boolean = sessionStorage.getItem('token') !== null;
   loggedToken: string | undefined;
 
@@ -64,8 +63,6 @@ export class AuthService {
     const removeToken = '';
     this.store.dispatch(setToken({ value: removeToken }));
     this.isLogged = false;
-
-    // Remove token from sessionStorage
     sessionStorage.removeItem('token');
   }
 

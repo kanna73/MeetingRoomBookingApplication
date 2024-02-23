@@ -20,5 +20,11 @@ namespace Meeting_Room_Booking_Application.Repo
             return result;
         }
 
+        public async Task<List<Location>> getLoactionByID(int id)
+        {
+            var result = await _dbContext.Locations.Where(l => l.Id == id).ToListAsync();
+            return result;
+        }
+
     }
 }

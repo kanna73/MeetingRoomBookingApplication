@@ -15,11 +15,11 @@
                     Domain name should be Kanini
                 </mat-hint>
               </mat-form-field>
-              <mat-form-field class="passwordfield" appearance="fill">
+              <mat-form-field class="passwordfield" >
                 <mat-label>Password</mat-label>
                 <input matInput  class="passwordbox" matInput type="password" formControlName="userPassword">
-                <mat-hint class="error" *ngIf="password?.touched && password?.hasError('required')">
-                    This password field is required    
+                <mat-hint class="error" *ngIf="password?.touched && password?.hasError('invalidPassword')">
+                  Password must be at least 6 characters long and include at least one special character, one digit, and one uppercase letter.            
                 </mat-hint>
               </mat-form-field>
               <button mat-raised-button class="sumbitButton" color="primary" type="submit" >Login</button>

@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppStateModel } from '../../../shared/Global/AppState.Model';
 import { AuthService } from '../../../Service/Authentication/auth.service';
 import { Router } from '@angular/router';
+import { setSide } from '../../../shared/Global/Render_redux/condition.action';
 
 @Component({
   selector: 'app-header',
@@ -10,12 +11,14 @@ import { Router } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  display:any
   
-  constructor(private auth:AuthService,private route:Router) {
+  
+  constructor(private auth:AuthService,
+              private route:Router,
+              ) {
     
   }
-  
+ 
   logout()
   {
      this.auth.Logout();

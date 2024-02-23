@@ -1,10 +1,9 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-//import { locations } from "./location.state";
-import { locationModel } from "./location.model";
+import { locations } from "./location.state";
 
 
-const getlocationstate=createFeatureSelector<locationModel>('location');
+const getlocationstate=createFeatureSelector<locations>('location');
 
 export const getLocation=createSelector(getlocationstate,(state)=>{
-    return state;
+    return state.locationList;
 })

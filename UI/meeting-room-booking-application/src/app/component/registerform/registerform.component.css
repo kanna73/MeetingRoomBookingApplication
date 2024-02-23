@@ -38,35 +38,30 @@
     font-family: "Poppins", sans-serif;
     margin-top: 30px;
     font-size: 18px; 
-    width: 400px;
     height: 80px;
   }
   .EmpnoField{
     font-family: "Poppins", sans-serif;
     margin-top: 30px;
     font-size: 18px; 
-    width: 400px;
     height: 80px;
   }
   .emailfield{
     font-family: "Poppins", sans-serif;
     margin-top: 30px;
     font-size: 18px; 
-    width: 400px;
     height: 80px;
   }
   .locationField{
     font-family: "Poppins", sans-serif;
     margin-top: 30px;
     font-size: 18px; 
-    width: 400px;
     height: 80px;
   }
   .passwordfield{
     font-family: "Poppins", sans-serif;
     margin-top: 30px;
     font-size: 18px; 
-    width: 400px;
     height: 80px;
   }
   .sumbitButton{
@@ -97,4 +92,25 @@
   .loginClick{
     color:blue;
     cursor: pointer;
+  }
+
+
+  @media screen and (min-width:370px) and (max-width:450px) {
+
+    .formContainer{
+      width:auto;
+    }
+    .registercontainer{
+      width:auto;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    .registerForm{
+      width:370px;
+      padding-left: 10px;
+    }
+    /* .nameField,.EmpnoField,.emailfield,.locationField,.passwordfield{
+      width:365px;
+    } */
   }

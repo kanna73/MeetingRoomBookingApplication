@@ -1,8 +1,7 @@
 
 <app-header></app-header>
-<div class="mainContent">
-    <app-sidebar ></app-sidebar>
+<div class="mainContent" >
+    <app-sidebar class=" sidebar"></app-sidebar>
     <app-meeting-form-component *ngIf="display.booking"></app-meeting-form-component>
-    <!-- <app-profile *ngIf="display.profile"></app-profile> -->
     <app-view *ngIf="display.view"></app-view>
 </div>

@@ -16,7 +16,7 @@ const _locationReducer=createReducer(locationState,
     on(setLocation,(state,action)=>{
         return{
             ...state,
-            locationList:action.value,
+            locationList:[...state.locationList,...action.value],
             ErrorID:0,
             ErrorMessage:''
         }

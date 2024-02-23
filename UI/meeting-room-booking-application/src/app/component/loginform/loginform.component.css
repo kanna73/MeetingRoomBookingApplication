@@ -14,14 +14,12 @@
     font-family: "Poppins", sans-serif;
     margin-top: 30px;
     font-size: 18px; 
-    width: 400px;
     height: 80px;
   }
   .passwordfield{
     font-family: "Poppins", sans-serif;
     margin-top: 30px;
     font-size: 18px; 
-    width: 400px;
     height: 80px;
   }
   .mainheading{
@@ -60,6 +58,24 @@
   .registerClick{
     color:blue;
     cursor: pointer;
+  }
+  .custom-snackbar{
+    background-color: rgb(64, 188, 255);
+  color: #fff; 
+  }
+
+  @media screen and (min-width:370px) and (max-width:450px) {
+
+    .loginFormContainer{
+      width:auto;
+    }
+    .loginForm{
+      padding:10px;
+    }
+   .register{
+    margin-top: 20px;
+   }
+    
   }
  
 

@@ -1,3 +1,15 @@
 .mainContent{
     display: flex;
 }
+
+@media screen and (min-width:370px) and (max-width:450px) {
+    .mainContent{
+        position: relative;
+        display: block;
+    }
+    /* .sidebar{
+        position: absolute;
+        top:0;
+        left: 0;
+    } */
+}

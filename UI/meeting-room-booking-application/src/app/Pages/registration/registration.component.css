@@ -2,3 +2,15 @@
     display: flex;
 
 }
+
+
+@media screen and (min-width:370px) and (max-width:450px) {
+
+    .image{
+        display: none;
+    }
+   .registerComponent{
+    display: block;
+   }
+    
+  }

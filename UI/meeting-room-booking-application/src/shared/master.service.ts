@@ -15,6 +15,11 @@ export class MasterService {
     return this.http.get<locationModel[]>("https://localhost:7275/api/locations");
   }
 
+  getLoactionByID(id:number):Observable<locationModel[]>{
+    const url =`https://localhost:7275/api/getLoactionByID?id=${id}`
+    return this.http.get<locationModel[]>(url);
+  }
+
   public addBooking(data:any):Observable<any>{
     return this.http.post("https://localhost:7275/api/meeting",data);
   }

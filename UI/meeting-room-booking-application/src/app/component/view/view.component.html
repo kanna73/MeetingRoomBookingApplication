@@ -1,26 +1,4 @@
-<!-- <div *ngIf="todayMeeting.length > 0; else nomeeting" class="card-container">
-  <div *ngFor="let meeting of todayMeeting" class="card">
-    <mat-card>
-      <img mat-card-image [src]="meeting.imagepath" alt="{{ meeting.title }}" class="image">
-      <mat-card-content>
-        <h2 mat-card-title>{{ meeting.roomName }}</h2>
-        <p mat-card-subtitle>Meeting Title: {{ meeting.meetingTitle }}</p>
-        <p mat-card-subtitle>Start Time: {{ parseAndFormatTime(meeting.startTime) }}</p>
-        <p mat-card-subtitle>End Time: {{ parseAndFormatTime(meeting.endTime) }}</p>
-        <p mat-card-subtitle>Booked by: {{ meeting. empName}}</p>
-      </mat-card-content>
-    </mat-card>
-  </div>
 
-</div>
-
-<ng-template #nomeeting>
-  <div class="no-meetings-message">
-    No meetings available.
-  </div>
-</ng-template> -->
-
-<!-- view.component.html -->
 
 <div *ngIf="todayMeeting.length > 0; else noMeeting" class="card-container">
   <div *ngFor="let meeting of pagedMeetings" class="card">
@@ -29,8 +7,8 @@
       <mat-card-content>
         <h2 mat-card-title>{{ meeting.roomName }}</h2>
         <p mat-card-subtitle>Meeting Title: {{ meeting.meetingTitle }}</p>
-        <p mat-card-subtitle>Start Time: {{ parseAndFormatTime(meeting.startTime) }}</p>
-        <p mat-card-subtitle>End Time: {{ parseAndFormatTime(meeting.endTime) }}</p>
+        <p mat-card-subtitle>Start Time: {{ meeting.startTime | myDate}}</p>
+        <p mat-card-subtitle>End Time: {{ meeting.endTime | myDate }}</p>
         <p mat-card-subtitle>Booked by: {{ meeting.empName }}</p>
       </mat-card-content>
     </mat-card>

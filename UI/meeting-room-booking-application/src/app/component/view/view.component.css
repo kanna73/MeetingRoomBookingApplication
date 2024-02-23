@@ -46,4 +46,10 @@
     bottom: 0 ; 
     left:40%   
   }
+
+  @media screen and (min-width:370px) and (max-width:450px) {
+    .no-meetings-message{
+      margin: 0;
+    }
+  }
   

@@ -13,15 +13,14 @@ export class BookingEffects{
         
     }
 
-    _booking = createEffect(()=>this.action$.pipe(ofType(POST_REQUEST),
-    tap(() => console.log(' POST_REQUEST Effect triggered')),  // Add this line
-    exhaustMap((action :{data:any})=>{
-        console.log("data ",action.data)
-         return this.service.addBooking(action.data).pipe(
-            map(respone => postSuccess({message:respone.message})),
-            catchError(error => of(postFailure({error:error.message})))
-         )
-    })
+    _booking = createEffect(() => this.action$.pipe
+     (ofType(POST_REQUEST),
+        exhaustMap((action: { data: any }) => {
+            return this.service.addBooking(action.data).pipe(
+                map(respone => postSuccess({ message: respone.message })),
+                catchError(error => of(postFailure({ error: error.message })))
+            )
+        })
     ))
 }
 

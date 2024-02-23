@@ -101,6 +101,14 @@ namespace Meeting_Room_Booking_Application.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+
+        public async Task<List<LocationView>> getLoactionByID(int id)
+        {
+            var result = await _locationService.getLocationById(id);
+            return result;
+        }
+
 
     }
 

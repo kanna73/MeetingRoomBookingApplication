@@ -22,7 +22,6 @@ namespace Meeting_Room_Booking_Application.Middleware
             var statusCode = HttpStatusCode.InternalServerError; // 500 by default
             var message = "An unexpected error occurred.";
 
-            // Customize the response based on the exception type
             if (exception is NotFoundException)
             {
                 statusCode = HttpStatusCode.NotFound; // 404
@@ -42,9 +41,9 @@ namespace Meeting_Room_Booking_Application.Middleware
             context.Response.StatusCode = (int)statusCode;
             context.Response.ContentType = "application/json";
 
-            // You can log the exception here if needed
 
-            return context.Response.WriteAsync(new Error((int)statusCode, message).ToString());
+            //return context.Response.WriteAsync(new Error((int)statusCode, message).ToString());
+            return context.Response.WriteAsJsonAsync(new Error((int)statusCode, message));
         }
     }
 }

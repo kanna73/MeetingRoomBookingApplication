@@ -36,7 +36,7 @@ builder.Services.AddScoped<IBookingRepo, BookingRepo>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-builder.Services.AddTransient<GlobalExceptionMiddleware>();
+builder.Services.AddScoped<GlobalExceptionMiddleware>();
 
 
 
